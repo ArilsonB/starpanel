@@ -14,7 +14,7 @@ func RegisterRoutes(router fiber.Router) {
 }
 
 func ReloadNginx(c *fiber.Ctx) error {
-	cmd := exec.Command("nginx", "-s", "reload")
+	cmd := exec.Command("/var/starpanel/packages/nginx/v1/nginx", "-s", "reload")
 	err := cmd.Run()
 	if err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
