@@ -1,3 +1,24 @@
 {
-  "name": "Starpanel DEV"
+  "name": "Starpanel DevContainer (Ubuntu)",
+  "build": {
+    "dockerfile": "Dockerfile",
+    "context": ".."
+  },
+  "mounts": [
+    "source=${localWorkspaceFolder},target=/home/vscode/app,type=bind"
+  ],
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "terminal.integrated.shell.linux": "/bin/bash"
+      },
+      "extensions": [
+        "golang.go"
+      ]
+    }
+  },
+  "forwardPorts": [
+    8080
+  ],
+  "postCreateCommand": "go mod tidy"
 }
