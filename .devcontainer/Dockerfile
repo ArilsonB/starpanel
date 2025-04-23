@@ -13,7 +13,7 @@ ARG USER_GID=$USER_UID
 
 RUN apt-get update \
     && apt-get upgrade -y \
-    && apt-get install -y git wget tar git ca-certificates \
+    && apt-get install -y git wget tar git ca-certificates build-essential libpcre3 libpcre3-dev libssl-dev zlib1g-dev \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
@@ -23,13 +23,13 @@ RUN wget https://go.dev/dl/go$GO_VERSION.linux-amd64.tar.gz \
 
 RUN go version
 
-RUN groupmod --gid $USER_GID $USERNAME \
-    && usermod --uid $USER_UID --gid $USER_GID $USERNAME \
-    && chown -R $USER_UID:$USER_GID /home/$USERNAME
+# RUN groupmod --gid $USER_GID $USERNAME \
+#     && usermod --uid $USER_UID --gid $USER_GID $USERNAME \
+#     && chown -R $USER_UID:$USER_GID /home/$USERNAME
 
 RUN mkdir -p /home/$USERNAME/app
 
-USER $USERNAME
+USER root
 
 WORKDIR /home/$USERNAME/app
 
