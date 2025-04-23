@@ -20,5 +20,5 @@
   "forwardPorts": [
     8080
   ],
-  "postCreateCommand": "go mod tidy"
+  "postCreateCommand": "cd ./api && go mod tidy"
 }
