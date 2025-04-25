@@ -5,15 +5,69 @@
     "context": ".."
   },
   "mounts": [
-    "source=${localWorkspaceFolder},target=/home/vscode/app,type=bind"
+    {
+      "source": "${localWorkspaceFolder}",
+      "target": "/home/vscode/app",
+      "type": "bind"
+    },
+    // Zsh commands history persistence
+    {
+      "source": "${localEnv:HOME}/.zsh_history",
+      "target": "/root/.zsh_history",
+      "type": "bind"
+    },
+    // Git configuration file
+    {
+      "source": "${localEnv:HOME}/.gitconfig",
+      "target": "/root/.gitconfig",
+      "type": "bind"
+    }
   ],
   "customizations": {
     "vscode": {
       "settings": {
-        "terminal.integrated.shell.linux": "/bin/bash"
+        "files.eol": "\n",
+        "terminal.integrated.shell.linux": "/bin/bash",
+        "go.buildTags": "",
+        "go.toolsEnvVars": {
+          "CGO_ENABLED": "0"
+        },
+        "go.useLanguageServer": true,
+        "go.testEnvVars": {
+          "CGO_ENABLED": "1"
+        },
+        "go.testFlags": [
+          "-v",
+          "-race"
+        ],
+        "go.testTimeout": "10s",
+        "go.coverOnSingleTest": true,
+        "go.coverOnSingleTestFile": true,
+        "go.coverOnTestPackage": true,
+        "go.lintTool": "golangci-lint",
+        "go.lintOnSave": "package",
+        "[go]": {
+          "editor.codeActionsOnSave": {
+            "source.organizeImports": "always"
+          }
+        },
+        "gopls": {
+          "usePlaceholders": false,
+          "staticcheck": true,
+          "formatting.gofumpt": true
+        }
       },
       "extensions": [
-        "golang.go"
+        "golang.go",
+        "eamodio.gitlens",
+        "ms-azuretools.vscode-docker"
+      ],
+      "tasks": [
+        {
+          "label": "Start redis",
+          "type": "shell",
+          "command": "redis-server"
+        }
       ]
     }
   },
@@ -25,5 +79,5 @@
   "forwardPorts": [
     8080
   ],
-  "postCreateCommand": "cd ./api && go mod tidy"
+  "postCreateCommand": "cd ./api && go mod download && go mod tidy"
 }

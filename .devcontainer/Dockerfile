@@ -4,7 +4,6 @@ LABEL version="1.0"
 
 # Evita prompts interativos durante a instalação
 ENV DEBIAN_FRONTEND=noninteractive
-
 ENV GO_VERSION=1.24.2
 ENV GOROOT=/usr/local/go
 ENV GOPATH=/go
@@ -14,25 +13,21 @@ ARG USERNAME=vscode
 ARG USER_UID=1000
 ARG USER_GID=$USER_UID
 
+
+# RUN groupmod --gid $USER_GID $USERNAME \
+#     && usermod --uid $USER_UID --gid $USER_GID $USERNAME \
+#     && chown -R $USER_UID:$USER_GID /home/$USERNAME
+
 RUN apt-get update \
-    && apt-get upgrade -y \
     && apt-get install -y git wget tar git ca-certificates coreutils build-essential libpcre3 libpcre3-dev libssl-dev zlib1g-dev redis-server \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
+
 
 RUN wget https://go.dev/dl/go$GO_VERSION.linux-amd64.tar.gz \
     && tar -C /usr/local -zxf go$GO_VERSION.linux-amd64.tar.gz \
     && rm go$GO_VERSION.linux-amd64.tar.gz
 
-RUN go version
-
-# COPY ./redis.conf /etc/redis/redis.conf
-
-RUN redis-server --daemonize yes
-
-# RUN groupmod --gid $USER_GID $USERNAME \
-#     && usermod --uid $USER_UID --gid $USER_GID $USERNAME \
-#     && chown -R $USER_UID:$USER_GID /home/$USERNAME
 
 RUN mkdir -p /home/$USERNAME/app
 
@@ -40,4 +35,17 @@ USER root
 
 WORKDIR /home/$USERNAME/app
 
-CMD [ "/bin/bash" ]
+# COPY ./.devcontainer/redis/start.sh /usr/local/bin/start.sh
+# RUN chmod +x /usr/local/bin/start.sh
+
+# Instead of using systemctl, run Redis directly
+# Create directory for Redis if needed
+# RUN mkdir -p /var/run/redis && chown redis:redis /var/run/redis
+
+# Start Redis server in the background and ping it
+# RUN redis-server --daemonize no && redis-cli ping
+
+# Start Redis in foreground (Docker best practice)
+# Set startup script as entrypoint
+# ENTRYPOINT ["/usr/local/bin/start.sh"]
+# CMD ["/bin/bash"]
