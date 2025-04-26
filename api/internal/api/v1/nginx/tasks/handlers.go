@@ -23,7 +23,7 @@ func HandleinstallNginxTask(ctx context.Context, t *asynq.Task) error {
 		return fmt.Errorf("failed to download nginx: %v", err)
 	}
 
-	cmd = exec.Command("bash", "-c", "tar -xzf ./installers/nginx-1.24.0.tar.gz")
+	cmd = exec.Command("bash", "-c", "tar -xzf ./installers/nginx-1.24.0.tar.gz -C ./installers")
 	err = cmd.Run()
 	if err != nil {
 		return fmt.Errorf("failed to extract nginx: %v", err)
@@ -84,28 +84,6 @@ func HandleinstallNginxTask(ctx context.Context, t *asynq.Task) error {
 	}
 
 	fmt.Printf("Nginx installed successfully: %s\n", payload.PackageName)
-
-	// cmd = exec.Command("bash", "-c", "mkdir -p /var/starpanel/packages/nginx/v1/logs")
-	// err = cmd.Run()
-	// if err != nil {
-	// 	return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-	// 		"error": fmt.Sprintf("Failed to create nginx logs directory: %v", err),
-	// 	})
-	// }
-	// cmd = exec.Command("bash", "-c", "cp -r /var/starpanel/packages/nginx/v1/nginx/logs/* /var/starpanel/packages/nginx/v1/logs")
-	// err = cmd.Run()
-	// if err != nil {
-	// 	return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-	// 		"error": fmt.Sprintf("Failed to copy nginx logs files: %v", err),
-	// 	})
-	// }
-	// cmd = exec.Command("bash", "-c", "rm -rf /var/starpanel/packages/nginx/v1/nginx/logs")
-	// err = cmd.Run()
-	// if err != nil {
-	// 	return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-	// 		"error": fmt.Sprintf("Failed to remove nginx logs files: %v", err),
-	// 	})
-	// }
 
 	return nil
 }

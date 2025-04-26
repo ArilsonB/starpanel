@@ -59,8 +59,7 @@
       },
       "extensions": [
         "golang.go",
-        "eamodio.gitlens",
-        "ms-azuretools.vscode-docker"
+        "eamodio.gitlens"
       ],
       "tasks": [
         {
@@ -79,5 +78,6 @@
   "forwardPorts": [
     8080
   ],
-  "postCreateCommand": "cd ./api && go mod download && go mod tidy"
+  "postCreateCommand": "cd ./api && go mod download && go mod tidy",
+  "postStartCommand": "redis-server --daemonize yes"
 }
